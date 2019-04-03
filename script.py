@@ -30,7 +30,7 @@ for i in range(args_num):
     l_bound.append(float(input()))
     print('Enter right bound', i)
     r_bound.append(float(input()))
- 
+
 
 print('Enter number of algorithm steps')
 n = int(input())
@@ -44,7 +44,6 @@ if (args_num == 1):
     min_x = l_bound[0]
     min_y = func(l_bound[0])
     x_rand_list = [random.uniform(l_bound[0], r_bound[0]) for i in range(n)]
-    x_rand_list = sorted(x_rand_list)
     y_rand_list = []
     for x_rand in x_rand_list:
         y_rand = func(x_rand)
@@ -75,9 +74,7 @@ if (args_num == 2):
     min_y = l_bound[1]
     min_z = func(min_x, min_y)
     x_rand_list = [random.uniform(l_bound[0], r_bound[0]) for i in range(n)]
-    x_rand_list = sorted(x_rand_list)
     y_rand_list = [random.uniform(l_bound[1], r_bound[1]) for i in range(n)]
-    y_rand_list = sorted(y_rand_list)
     z_rand_list = []
     for x_rand, y_rand in zip(x_rand_list, y_rand_list):
         z_rand = func(x_rand, y_rand)
@@ -95,5 +92,17 @@ if (args_num == 2):
     ax.set_xlabel('X Label')
     ax.set_ylabel('Y Label')
     ax.set_zlabel('Z Label')
-
     plt.show()
+
+if (args_num > 2):
+    xn_rand_list = [[random.uniform(l, r) for j in range(n)] for l, r in zip(l_bound, r_bound)]
+    min_xn = l_bound
+    min_y = func(*l_bound)
+    for i in range(n):
+        rand_xn = zip(*xn_rand_list)[i]
+        rand_y = func(rand_xn)
+        if (rand_y < min_y):
+            min_y = rand_y
+            min_xn = rand_xn
+    print('min(f(X)) = ', min_y)
+    print('argmin(f(X)) = ', min_xn)
