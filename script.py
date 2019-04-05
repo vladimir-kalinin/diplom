@@ -17,12 +17,6 @@ for i in range(args_num):
 func = Expression(func_str, args)
 print(func)
 
-# print('Enter x')
-# x = int(input())
-# print('Enter y')
-# y = int(input())
-# print(fn(x, y))
-
 l_bound = []
 r_bound = []
 for i in range(args_num):
@@ -35,6 +29,7 @@ for i in range(args_num):
 print('Enter number of algorithm steps')
 n = int(input())
 
+random.seed(72)
 
 if (args_num == 1):
     x = np.linspace(l_bound[0], r_bound[0], 1000)
@@ -68,7 +63,9 @@ if (args_num == 2):
     zs = np.array([func(x, y) for x, y in zip(np.ravel(X), np.ravel(Y))])
     Z = zs.reshape(X.shape)
 
-    ax.plot_surface(X, Y, Z, alpha=0.5)
+    # ax.plot_surface(X, Y, Z, alpha=0.5)
+    # ax.contour(X, Y, Z)
+    ax.plot_wireframe(X, Y, Z, alpha=0.5)
 
     min_x = l_bound[0]
     min_y = l_bound[1]
@@ -99,8 +96,8 @@ if (args_num > 2):
     min_xn = l_bound
     min_y = func(*l_bound)
     for i in range(n):
-        rand_xn = zip(*xn_rand_list)[i]
-        rand_y = func(rand_xn)
+        rand_xn = [xn[i] for xn in xn_rand_list]
+        rand_y = func(*rand_xn)
         if (rand_y < min_y):
             min_y = rand_y
             min_xn = rand_xn
