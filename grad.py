@@ -89,9 +89,9 @@ if (args_num == 2):
     zs = np.array([func(x, y) for x, y in zip(np.ravel(X), np.ravel(Y))])
     Z = zs.reshape(X.shape)
 
-    # ax.plot_surface(X, Y, Z, alpha=0.5)
-    # ax.contour(X, Y, Z)
-    ax.plot_wireframe(X, Y, Z, alpha=0.5)
+    ax.plot_surface(X, Y, Z, alpha=0.5)
+    ax.contour(X, Y, Z)
+    # ax.plot_wireframe(X, Y, Z, alpha=0.5)
 
     x_rand_list = [random.uniform(l_bound[0], r_bound[0])]
     y_rand_list = [random.uniform(l_bound[1], r_bound[1])]
@@ -107,6 +107,10 @@ if (args_num == 2):
             curr_step = curr_step / 2
             new_x = x_rand_list[i] - grad_x * curr_step
             new_y = y_rand_list[i] - grad_y * curr_step
+        if (new_x < l_bound[0] or new_x > r_bound[0]):
+            break
+        if (new_y < l_bound[1] or new_y > r_bound[1]):
+            break
         x_rand_list.append(new_x)
         y_rand_list.append(new_y)
         z_rand_list.append(func(new_x, new_y))
