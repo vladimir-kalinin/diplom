@@ -6,7 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 delta = 0.001
-epsilon = 0.1
+epsilon = 0.001
 step = 0.1
 
 
