@@ -22,18 +22,18 @@ class Solver:
         print('result = ', result)
         return result
 
-    def set(self, func_str, args, l_bound, r_bound, step_num, epsilon):
+    def set(self, func_str, l_bound, r_bound, step_num, epsilon):
         self.func_str = func_str
-        self.args = args
+        self.args = []
         self.l_bound = l_bound
         self.r_bound = r_bound
         self.step_num = step_num
         self.epsilon = epsilon
 
-        self.func = Expression(func_str, args)
+        self.func = Expression(func_str, self.args)
         random.seed(73)
 
-    def plot(self):
+    def plot(self, fig):
         print("func_str ", self.func_str)
         print("args ", self.args)
         print("l_bound ", self.l_bound)
@@ -41,7 +41,7 @@ class Solver:
         print("step_num ", self.step_num)
 
         if (len(self.args) == 1):
-            fig = plt.figure()
+            # fig = plt.figure()
             x = np.linspace(self.l_bound[0], self.r_bound[0], 1000)
             y = [self.func(i) for i in x]
 
@@ -74,11 +74,11 @@ class Solver:
             # plt.show()
 
             # fig, axes = plt.subplots(nrows=1, ncols=1)
-            return fig
+            # return fig
 
         if (len(self.args) == 2):
-            fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
+            # fig = plt.figure()
+            ax = fig.gca(projection='3d')
             x = np.arange(self.l_bound[0], self.r_bound[0], 0.05)
             y = np.arange(self.l_bound[1], self.r_bound[1], 0.05)
             X, Y = np.meshgrid(x, y)
@@ -87,7 +87,7 @@ class Solver:
             Z = zs.reshape(X.shape)
 
             ax.plot_surface(X, Y, Z, alpha=0.5)
-            ax.contour(X, Y, Z)
+            ax.contour(X, Y, Z, zdir='z', offset=0)
             # ax.plot_wireframe(X, Y, Z, alpha=0.5)
 
             x_rand_list = [random.uniform(self.l_bound[0], self.r_bound[0])]
@@ -124,4 +124,4 @@ class Solver:
             ax.set_zlabel('Z Label')
             # plt.show()
 
-            return fig
+            # return fig
