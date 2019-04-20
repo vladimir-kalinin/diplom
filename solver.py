@@ -22,12 +22,13 @@ class Solver:
         print('result = ', result)
         return result
 
-    def set(self, func_str, args, l_bound, r_bound, step_num):
+    def set(self, func_str, args, l_bound, r_bound, step_num, epsilon):
         self.func_str = func_str
         self.args = args
         self.l_bound = l_bound
         self.r_bound = r_bound
         self.step_num = step_num
+        self.epsilon = epsilon
 
         self.func = Expression(func_str, args)
         random.seed(73)
