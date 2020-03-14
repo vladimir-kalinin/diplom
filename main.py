@@ -52,23 +52,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         step_num = int(self.textEdit_n.toPlainText())
         epsilon = float(self.textEdit_eps.toPlainText())
         self.solver.set(func_str, l_bound, r_bound, step_num, epsilon)
+
         if not self.added:
-            # generates 3D Axes object
             self.fig = plt.figure()
-            self.axes = self.fig.gca(projection='3d')
+            self.axes = self.fig.gca()
             self.canvas = MyMplCanvas(self.fig)
-            self.solver.plot(self.fig)
+        else:
+            self.axes.clear()
+            self.fig.clear()
+        if len(l_bound) == 1:
+            ax = self.fig.add_subplot(111)
+        else:
+            ax = self.fig.add_subplot(111, projection='3d')
+
+        self.solver.plot(ax)
+
+        # ax.grid()
+        if not self.added:
             self.komponovka = QVBoxLayout(self.widget)
             self.komponovka.addWidget(self.canvas)
             self.toolbar = NavigationToolbar(self.canvas, self)
             self.komponovka.addWidget(self.toolbar)
             self.added = True
         else:
-            self.axes.clear()
-            self.solver.plot(self.fig)
             self.fig.canvas.draw()
-            # self.komponovka.update()
-            # self.komponovka.widget() = QWidget(self.canvas)
 
 
 def main():

@@ -33,7 +33,7 @@ class Solver:
         self.func = Expression(func_str, self.args)
         random.seed(73)
 
-    def plot(self, fig):
+    def plot(self, ax):
         print("func_str ", self.func_str)
         print("args ", self.args)
         print("l_bound ", self.l_bound)
@@ -45,7 +45,7 @@ class Solver:
             x = np.linspace(self.l_bound[0], self.r_bound[0], 1000)
             y = [self.func(i) for i in x]
 
-            ax = fig.add_subplot(111)
+            # ax = fig.add_subplot(111)
             ax.plot(x, y)
 
             x_rand_list = []
@@ -78,9 +78,9 @@ class Solver:
 
         if (len(self.args) == 2):
             # fig = plt.figure()
-            ax = fig.gca(projection='3d')
-            x = np.arange(self.l_bound[0], self.r_bound[0], 0.05)
-            y = np.arange(self.l_bound[1], self.r_bound[1], 0.05)
+            # ax = fig.gca(projection='3d')
+            x = np.linspace(self.l_bound[0], self.r_bound[0], 20)
+            y = np.linspace(self.l_bound[1], self.r_bound[1], 20)
             X, Y = np.meshgrid(x, y)
             zs = np.array([self.func(x, y)
                            for x, y in zip(np.ravel(X), np.ravel(Y))])
