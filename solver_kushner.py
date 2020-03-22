@@ -17,17 +17,18 @@ def x_new(x1, x2, z1, z2, z_min, delta):
 
 class Solver:
     def __init__(self):
-        self.delta = 0.001
+        self.delta = 10
         self.epsilon = 0.001
         self.step = 0.1
 
-    def set(self, func_str, l_bound, r_bound, step_num, epsilon):
+    def set(self, func_str, l_bound, r_bound, step_num, epsilon, delta):
         self.func_str = func_str
         self.args = []
         self.l_bound = l_bound
         self.r_bound = r_bound
         self.step_num = step_num
         self.epsilon = epsilon
+        self.delta = delta
 
         self.func = Expression(func_str, self.args)
         random.seed(73)
@@ -46,10 +47,10 @@ class Solver:
             R = [1]
             r_max = R[0]
             i_max = 0
-            delta = 10
 
             for iteration in range(self.step_num):
-                x = x_new(X[i_max], X[i_max + 1], Z[i_max], Z[i_max + 1], z_min, delta)
+                x = x_new(X[i_max], X[i_max + 1], Z[i_max],
+                          Z[i_max + 1], z_min, self.delta)
                 print('x =', x)
                 X.insert(i_max + 1, x)
                 Z.insert(i_max + 1, self.func(X[i_max + 1]))
@@ -57,9 +58,9 @@ class Solver:
                     z_min = Z[i_max]
                 R.pop(i_max)
                 R.insert(i_max, haract(X[i_max], X[i_max + 1],
-                                    Z[i_max], Z[i_max + 1], z_min, delta))
+                                       Z[i_max], Z[i_max + 1], z_min, self.delta))
                 R.insert(i_max + 1, haract(X[i_max + 1], X[i_max + 2],
-                                        Z[i_max + 1], Z[i_max + 2], z_min, delta))
+                                           Z[i_max + 1], Z[i_max + 2], z_min, self.delta))
                 r_max = max(R)
                 i_max = R.index(r_max)
 

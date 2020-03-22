@@ -18,14 +18,16 @@ class Solver:
         self.delta = 0.001
         self.epsilon = 0.001
         self.step = 0.1
+        self.r = 2
 
-    def set(self, func_str, l_bound, r_bound, step_num, epsilon):
+    def set(self, func_str, l_bound, r_bound, step_num, epsilon, r):
         self.func_str = func_str
         self.args = []
         self.l_bound = l_bound
         self.r_bound = r_bound
         self.step_num = step_num
         self.epsilon = epsilon
+        self.r = r
 
         self.func = Expression(func_str, self.args)
         random.seed(73)
@@ -38,8 +40,6 @@ class Solver:
         print("step_num ", self.step_num)
 
         if (len(self.args) == 1):
-            r = 2
-
             X = [self.l_bound[0], self.r_bound[0]]
             Z = [self.func(self.l_bound[0]), self.func(self.r_bound[0])]
             z_min = min(Z)
@@ -55,7 +55,7 @@ class Solver:
                     if abs(Z[i+1] - Z[i])/(X[i+1] - X[i]) > M:
                         M = abs(Z[i+1] - Z[i])/(X[i+1] - X[i])
                 if M > 0:
-                    m = r*M
+                    m = self.r*M
                 else:
                     m = 1
                 x = x_new(X[i_max], X[i_max + 1], Z[i_max], Z[i_max + 1], m)

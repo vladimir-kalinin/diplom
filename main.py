@@ -13,7 +13,9 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 from gui import Ui_MainWindow
-from solver_kushner import Solver
+from solver_kushner import Solver as Solver_kushner
+from solver_loman import Solver as Solver_loman
+from solver_agp import Solver as Solver_agp
 
 
 class MyMplCanvas(FigureCanvas):
@@ -26,15 +28,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None, *args, **kwargs):
         QMainWindow.__init__(self)
         self.setupUi(self)
-        self.solver = Solver()
         self.added = False
         self.pushButton.clicked.connect(self.onButtonClick)
 
         # defaults
-        self.textEdit_func.setText('x**2 + y**2')
+        self.textEdit_func.setText('x**2')
         self.textEdit_n.setText('10')
         self.textEdit_eps.setText('0.1')
-        self.textEdit_borders.setText('(-5,5) (-3,7)')
+        self.textEdit_borders.setText('(-3,7)')
+        self.comboBox.addItems(["kushner", "loman", "AGP"])
 
     @pyqtSlot()
     def onButtonClick(self):
@@ -54,7 +56,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             r_bound.append(int(tmp[1]))
         step_num = int(self.textEdit_n.toPlainText())
         epsilon = float(self.textEdit_eps.toPlainText())
-        self.solver.set(func_str, l_bound, r_bound, step_num, epsilon)
+        delta = float(self.textEdit_delta.toPlainText())
+        r = float(self.textEdit_r.toPlainText())
+
+        if self.comboBox.currentText() == "kushner":
+            self.solver = Solver_kushner()
+            self.solver.set(func_str, l_bound, r_bound, step_num, epsilon, delta)
+        if self.comboBox.currentText() == "loman":
+            self.solver = Solver_loman()
+            self.solver.set(func_str, l_bound, r_bound, step_num, epsilon, r)
+        if self.comboBox.currentText() == "AGP":
+            self.solver = Solver_agp()
+            self.solver.set(func_str, l_bound, r_bound, step_num, epsilon, r)
 
         if not self.added:
             self.fig = plt.figure()
