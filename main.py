@@ -1,16 +1,19 @@
 import sys
-import time
 
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout
+import matplotlib.pyplot as plt
+
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5 import NavigationToolbar2QT as NavigationToolbar
+from mpl_toolkits.mplot3d import Axes3D
+
 
 from gui import Ui_MainWindow
-from solver import Solver
+from solver_kushner import Solver
 
 
 class MyMplCanvas(FigureCanvas):
@@ -67,7 +70,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.solver.plot(ax)
 
-        # ax.grid()
+        ax.grid()
         if not self.added:
             self.komponovka = QVBoxLayout(self.widget)
             self.komponovka.addWidget(self.canvas)
