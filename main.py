@@ -81,7 +81,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             ax = self.fig.add_subplot(111, projection='3d')
 
-        self.solver.plot(ax)
+        # self.progressBar.setValue(0)
+        self.solver.plot(ax, self.textBrowser, self.progressBar)
+        self.progressBar.setValue(100)
 
         ax.grid()
         if not self.added:
