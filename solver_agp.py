@@ -1,6 +1,5 @@
 from Equation import Expression
 import numpy as np
-import random
 
 
 # R()
@@ -30,7 +29,6 @@ class Solver:
         self.r = r
 
         self.func = Expression(func_str, self.args)
-        random.seed(73)
 
     def plot(self, ax, textBrowser, progressBar):
         print("func_str ", self.func_str)
