@@ -1,6 +1,5 @@
 from Equation import Expression
 import numpy as np
-import random
 
 
 # R()
@@ -30,9 +29,8 @@ class Solver:
         self.r = r
 
         self.func = Expression(func_str, self.args)
-        random.seed(73)
 
-    def plot(self, ax):
+    def plot(self, ax, textBrowser, progressBar):
         print("func_str ", self.func_str)
         print("args ", self.args)
         print("l_bound ", self.l_bound)
@@ -47,9 +45,11 @@ class Solver:
             r_max = R[0]
             i_max = 0
 
-            m = 2
+            m = 0
 
             for iteration in range(self.step_num):
+                progressBar.setValue(int(iteration*100/self.step_num))
+                # calculate m
                 M = 0
                 for i in range(len(X)-1):
                     if abs(Z[i+1] - Z[i])/(X[i+1] - X[i]) > M:
@@ -58,22 +58,33 @@ class Solver:
                     m = self.r*M
                 else:
                     m = 1
+
+                # calculate R
+                r_max = 0
+                i_max = 0
+                R.clear()
+                for i in range(len(X)-1):
+                    R.append(haract(X[i], X[i + 1], Z[i], Z[i + 1], m))
+                    if R[i] > r_max:
+                        r_max = R[i]
+                        i_max = i
+                if (X[i_max + 1] - X[i_max]) < self.epsilon:
+                    output = 'Accuracy reached on step: %d\n' % iteration
+                    output += 'x = ' + str(X[i_max]) + '\n'
+                    textBrowser.setText(output)
+                    break
+
+                # calculate new x, z
                 x = x_new(X[i_max], X[i_max + 1], Z[i_max], Z[i_max + 1], m)
                 X.insert(i_max + 1, x)
                 Z.insert(i_max + 1, self.func(X[i_max + 1]))
                 if Z[i_max] < z_min:
                     z_min = Z[i_max]
-                R.pop(i_max)
-                R.insert(i_max, haract(X[i_max], X[i_max + 1],
-                                    Z[i_max], Z[i_max + 1], m))
-                R.insert(i_max + 1, haract(X[i_max + 1], X[i_max + 2],
-                                        Z[i_max + 1], Z[i_max + 2], m))
-                r_max = max(R)
-                i_max = R.index(r_max)
 
-                print('X =', X)
-                print('Z =', Z)
-                print('R =', R)
+            if (iteration == self.step_num-1):
+                output = 'Accuracy not reached.\n'
+                output += 'x = ' + str(X[i_max]) + '\n'
+                textBrowser.setText(output)
 
             # plot algorithm steps
             ax.plot(X, Z, marker='o', color='r', ls='')

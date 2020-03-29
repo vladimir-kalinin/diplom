@@ -4,16 +4,13 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout
 import matplotlib.pyplot as plt
-
-
-import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5 import NavigationToolbar2QT as NavigationToolbar
 from mpl_toolkits.mplot3d import Axes3D
 
 
 from gui import Ui_MainWindow
-from solver_kushner import Solver as Solver_kushner
+from solver_perebor import Solver as Solver_perebor
 from solver_loman import Solver as Solver_loman
 from solver_agp import Solver as Solver_agp
 
@@ -36,7 +33,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.textEdit_n.setText('10')
         self.textEdit_eps.setText('0.1')
         self.textEdit_borders.setText('(-3,7)')
-        self.comboBox.addItems(["kushner", "loman", "AGP"])
+        self.comboBox.addItems(["perebor", "loman", "AGP"])
 
     @pyqtSlot()
     def onButtonClick(self):
@@ -59,8 +56,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         delta = float(self.textEdit_delta.toPlainText())
         r = float(self.textEdit_r.toPlainText())
 
-        if self.comboBox.currentText() == "kushner":
-            self.solver = Solver_kushner()
+        if self.comboBox.currentText() == "perebor":
+            self.solver = Solver_perebor()
             self.solver.set(func_str, l_bound, r_bound, step_num, epsilon, delta)
         if self.comboBox.currentText() == "loman":
             self.solver = Solver_loman()

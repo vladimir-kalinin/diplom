@@ -1,6 +1,5 @@
 from Equation import Expression
 import numpy as np
-import random
 
 
 # R()
@@ -30,7 +29,6 @@ class Solver:
         self.r = r
 
         self.func = Expression(func_str, self.args)
-        random.seed(73)
 
     def plot(self, ax, textBrowser, progressBar):
         print("func_str ", self.func_str)
@@ -75,10 +73,6 @@ class Solver:
                     output += 'x = ' + str(X[i_max]) + '\n'
                     textBrowser.setText(output)
                     break
-                # print('R =', R)
-                # print('r_max =', r_max)
-                # print('i_max =', i_max)
-
 
                 # calculate new x, z
                 x = x_new(X[i_max], X[i_max + 1], Z[i_max], Z[i_max + 1], m)
@@ -87,8 +81,6 @@ class Solver:
                 if Z[i_max] < z_min:
                     z_min = Z[i_max]
 
-                # print('X =', X)
-                # print('Z =', Z)
             if (iteration == self.step_num-1):
                 output = 'Accuracy not reached.\n'
                 output += 'x = ' + str(X[i_max]) + '\n'
