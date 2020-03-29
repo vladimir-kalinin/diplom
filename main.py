@@ -27,10 +27,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton.clicked.connect(self.onButtonClick)
 
         # defaults
-        self.textEdit_func.setText('x**2')
+        self.textEdit_func.setText('x**2 + y**2')
         self.textEdit_n.setText('10')
         self.textEdit_eps.setText('0.1')
-        self.textEdit_borders.setText('(-3,7)')
+        self.textEdit_borders.setText('(-3,7) (-5,4)')
         self.comboBox.addItems(["perebor", "loman", "AGP"])
 
     @pyqtSlot()
@@ -70,7 +70,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             ax = self.fig.add_subplot(111, projection='3d')
 
         # self.progressBar.setValue(0)
-        self.solver.plot(ax, self.textBrowser, self.progressBar)
+        self.solver.plot(ax)
         self.progressBar.setValue(100)
 
         ax.grid()

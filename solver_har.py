@@ -42,6 +42,8 @@ class Solver:
         self.r = r
         self.func = Expression(func_str, self.args)
         self.dimensions = len(self.args)
+        self.textBrowser = textBrowser
+        self.progressBar = progressBar
         if method == "perebor":
             self.haract = haract_perebor
             self.x_new = x_new_perebor
@@ -73,7 +75,9 @@ class Solver:
         m = 0
 
         for iteration in range(self.step_num):
-            # progressBar.setValue(int(iteration*100/self.step_num))
+            if len(fixed_args) == 0:
+                self.progressBar.setValue(int(iteration*100/self.step_num))
+
             # calculate m
             M = 0
             for i in range(len(X)-1):
@@ -112,7 +116,7 @@ class Solver:
                 z_min = Z[i_max]
 
         if (iteration == self.step_num-1):
-            output = 'Accuracy not reached.\n'
+            output = 'Accuracy not reached.==\n'
             output += 'x = ' + str(X[i_max]) + '\n'
             return Z[i_max], [X, Z, internal_results]
             # textBrowser.setText(output)
@@ -120,7 +124,7 @@ class Solver:
         # plot algorithm steps
         # ax.plot(X, Z, marker='o', color='r', ls='')
 
-    def plot(self, ax, textBrowser, progressBar):
+    def plot(self, ax):
         print("func_str ", self.func_str)
         print("args ", self.args)
         print("l_bound ", self.l_bound)
@@ -142,7 +146,7 @@ class Solver:
         else:
             z_min, result = self.solve(self.l_bound, self.r_bound, [])
             output = 'z_min = ' + str(z_min) + '\n'
-            textBrowser.setText(output)
+            self.textBrowser.setText(output)
 
             if self.dimensions == 2:
                 x_list = []
