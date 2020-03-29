@@ -10,9 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 from gui import Ui_MainWindow
-from solver_perebor import Solver as Solver_perebor
-from solver_loman import Solver as Solver_loman
-from solver_agp import Solver as Solver_agp
+from solver_har import Solver
 
 
 class MyMplCanvas(FigureCanvas):
@@ -53,18 +51,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             r_bound.append(int(tmp[1]))
         step_num = int(self.textEdit_n.toPlainText())
         epsilon = float(self.textEdit_eps.toPlainText())
-        delta = float(self.textEdit_delta.toPlainText())
+        # delta = float(self.textEdit_delta.toPlainText())
         r = float(self.textEdit_r.toPlainText())
 
-        if self.comboBox.currentText() == "perebor":
-            self.solver = Solver_perebor()
-            self.solver.set(func_str, l_bound, r_bound, step_num, epsilon, delta)
-        if self.comboBox.currentText() == "loman":
-            self.solver = Solver_loman()
-            self.solver.set(func_str, l_bound, r_bound, step_num, epsilon, r)
-        if self.comboBox.currentText() == "AGP":
-            self.solver = Solver_agp()
-            self.solver.set(func_str, l_bound, r_bound, step_num, epsilon, r)
+        self.solver = Solver()
+        self.solver.set(func_str, l_bound, r_bound, step_num, epsilon, r, self.comboBox.currentText(), self.textBrowser, self.progressBar)
 
         if not self.added:
             self.fig = plt.figure()
