@@ -152,6 +152,10 @@ class Solver:
             z_min, x_min, result = self.solve(self.l_bound, self.r_bound, [])
             X = result[0]
             Z = result[1]
+            output = 'z_min = ' + str(z_min) + '\n'
+            x_min.reverse()
+            output += 'x_min = ' + str(x_min) + '\n'
+            self.textBrowser.setText(output)
 
             # plot algorithm steps
             ax.plot(X, Z, marker='o', color='r', ls='')
@@ -160,36 +164,51 @@ class Solver:
             x = np.linspace(self.l_bound[0], self.r_bound[0], 1000)
             y = [self.func(i) for i in x]
             ax.plot(x, y)
-        else:
+        if self.dimensions == 2:
             z_min, x_min, result = self.solve(self.l_bound, self.r_bound, [])
             output = 'z_min = ' + str(z_min) + '\n'
             x_min.reverse()
             output += 'x_min = ' + str(x_min) + '\n'
             self.textBrowser.setText(output)
 
-            if self.dimensions == 2:
-                x_list = []
-                y_list = []
-                z_list = []
-                for x, args in zip(result[0], result[2]):
-                    for y, z in zip(args[0], args[1]):
+            x_list = []
+            y_list = []
+            z_list = []
+            for x, args in zip(result[0], result[2]):
+                for y, z in zip(args[0], args[1]):
+                    x_list.append(x)
+                    y_list.append(y)
+                    z_list.append(z)
+            # plot algorithm steps
+            ax.plot(x_list, y_list, z_list, marker='o', color='r', ls='')
+
+            # plot test func
+            x = np.linspace(self.l_bound[0], self.r_bound[0], 30)
+            y = np.linspace(self.l_bound[1], self.r_bound[1], 30)
+            X, Y = np.meshgrid(x, y)
+            zs = np.array([self.func(x, y)
+                        for x, y in zip(np.ravel(X), np.ravel(Y))])
+            Z = zs.reshape(X.shape)
+
+            ax.plot_surface(X, Y, Z, alpha=0.5)
+            ax.contour(X, Y, Z, zdir='z', offset=0)
+            ax.set_xlabel('X Label')
+            ax.set_ylabel('Y Label')
+            ax.set_zlabel('Z Label')
+        if self.dimensions > 2:
+            z_min, x_min, result = self.solve(self.l_bound, self.r_bound, [])
+            output = 'z_min = ' + str(z_min) + '\n'
+            x_min.reverse()
+            output += 'x_min = ' + str(x_min) + '\n'
+            self.textBrowser.setText(output)
+            x_list = []
+            y_list = []
+            z_list = []
+            for x, args in zip(result[0], result[2]):
+                for y, args2 in zip(args[0], args[2]):
+                    for z in args2[0]:
                         x_list.append(x)
                         y_list.append(y)
                         z_list.append(z)
-                # plot algorithm steps
-                ax.plot(x_list, y_list, z_list, marker='o', color='r', ls='')
-
-                # plot test func
-                x = np.linspace(self.l_bound[0], self.r_bound[0], 30)
-                y = np.linspace(self.l_bound[1], self.r_bound[1], 30)
-                X, Y = np.meshgrid(x, y)
-                zs = np.array([self.func(x, y)
-                            for x, y in zip(np.ravel(X), np.ravel(Y))])
-                Z = zs.reshape(X.shape)
-
-                ax.plot_surface(X, Y, Z, alpha=0.5)
-                ax.contour(X, Y, Z, zdir='z', offset=0)
-                ax.set_xlabel('X Label')
-                ax.set_ylabel('Y Label')
-                ax.set_zlabel('Z Label')
-
+            # plot algorithm steps
+            ax.plot(x_list, y_list, z_list, marker='o', color='r', ls='')
