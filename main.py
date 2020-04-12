@@ -60,12 +60,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.args = ['x', 'y']
 
         borders = self.textEdit_borders.toPlainText().split(' ')
-        print('borders = ', borders)
+        # print('borders = ', borders)
         l_bound = []
         r_bound = []
         for border in borders:
             tmp = border[1:-1].split(',')
-            print('tmp = ', tmp)
+            # print('tmp = ', tmp)
             l_bound.append(int(tmp[0]))
             r_bound.append(int(tmp[1]))
         step_num = int(self.textEdit_n.toPlainText())
@@ -76,6 +76,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.solver = Solver()
         self.solver.set(self.func, self.args, l_bound, r_bound, step_num, epsilon, r,
                         self.comboBox.currentText(), self.textBrowser, self.progressBar)
+        if self.checkBox_from_dll.isChecked():
+            x = lib.getcoord(self.spinBox_func_number.value()*2)
+            y = lib.getcoord(self.spinBox_func_number.value()*2 + 1)
+            self.solver.answer = [x, y]
 
         if not self.added:
             self.fig = plt.figure()
@@ -92,11 +96,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # self.progressBar.setValue(0)
         self.solver.plot(ax)
         self.progressBar.setValue(100)
-        if self.checkBox_from_dll.isChecked():
-            answer = str(lib.getcoord(self.spinBox_func_number.value()*2))
-            answer += ', '
-            answer += str(lib.getcoord(self.spinBox_func_number.value()*2 + 1))
-            self.textBrowser.append('answer = ' + answer)
 
         ax.grid()
         if not self.added:
