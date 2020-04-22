@@ -34,6 +34,7 @@ class Solver:
         self.l_bound = l_bound
         self.r_bound = r_bound
         self.step_num = step_num
+        self.step_num_total = step_num
         self.epsilon = epsilon
         self.r = r
         self.func = func
@@ -74,9 +75,9 @@ class Solver:
         i_max = 0 # index of interval with max R
         m = 0
 
-        for iteration in range(self.step_num):
-            if len(fixed_args) == 0:
-                self.progressBar.setValue(int(iteration*100/self.step_num))
+        while self.step_num > 0:
+            self.step_num -= 1
+            # self.progressBar.setValue(int((self.step_num_total - self.step_num)*100/self.step_num_total))
 
             # calculate m
             M = 0
@@ -116,6 +117,7 @@ class Solver:
             if Z[i_max + 1] < z_min:
                 z_min = Z[i_max + 1]
 
+
         i_min = Z.index(z_min)
         if (len(X_min) > 0):
             tmp = X_min[i_min]
@@ -147,6 +149,9 @@ class Solver:
             output = 'z_min = ' + str(z_min) + '\n'
             x_min.reverse()
             output += 'x_min = ' + str(x_min) + '\n'
+            output += 'steps = ' + \
+                str(self.step_num_total - self.step_num) + '\n'
+
             if len(self.answer):
                 accuracy = np.sqrt((self.answer[0] - x_min[0])**2 + (self.answer[1] - x_min[1])**2)
                 output += 'accuracy = ' + str(accuracy) + '\n'
